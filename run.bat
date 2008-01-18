@@ -1,0 +1,1 @@
+java -cp bin;lib/sigar.jar org.audiolizer.Start
