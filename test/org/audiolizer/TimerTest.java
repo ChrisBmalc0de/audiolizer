@@ -36,4 +36,17 @@ public class TimerTest {
 		assertTrue(timer.elapsedSinceStartInMs() > 25);
 		assertTrue(timer.elapsedSinceStartInMs() < 75);
 	}
+	
+	@Test
+	public void testGetElapsedTimeAndRestart() throws Exception {
+		timer.start();
+		long startTime = timer.getStartTime();
+		assertTrue(startTime >= System.currentTimeMillis());
+		
+		Thread.sleep(50);
+		
+		assertTrue(timer.getElapsedTimeAndRestart() > 25);
+		
+		assertTrue(timer.getStartTime() > startTime);
+	}
 }
