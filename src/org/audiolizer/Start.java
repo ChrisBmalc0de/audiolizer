@@ -36,18 +36,26 @@ public class Start {
 	public static String getSamplePath() {
 		String value = SAMPLE_DEFAULT;
 		List valueAsList = (List)parsedArgs.get(SAMPLE);
-		if (value != null && valueAsList.size() > 0) {
+		if (valueAsList != null && valueAsList.size() > 0) {
 			value = (String)valueAsList.get(0);
 		}
 		
 		return value;
+	}
+	
+	public static float getZeroTrafficLevel() {
+		return 0;
+	}
+	
+	public static float getMaximumTrafficLevel() {
+		return 50;
 	}
 
 	public static void main(String argv[]) throws Exception {
 		
 		parseArguments(argv);
 		
-		Audiolizer audiolizer = new SampleAudiolizer(0, 50, new File("./samples/sample.wav"));
+		Audiolizer audiolizer = new SampleAudiolizer(getZeroTrafficLevel(), getMaximumTrafficLevel(), new File(getSamplePath()));
 		NetworkPerformanceMonitor monitor = new SigarNetworkPerformanceMonitor();
 		
 		while (true) {
