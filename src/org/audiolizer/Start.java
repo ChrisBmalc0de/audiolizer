@@ -10,6 +10,11 @@ public class Start {
 	private static final long MEASUREMENT_RESOLUTION = 1000;
 	private static final String SAMPLE = "sample";
 	private static final String SAMPLE_DEFAULT = "./samples/sample.wav";
+	private static final String ZERO_TRAFFIC_LEVEL = "min";
+	private static final float ZERO_TRAFFIC_LEVEL_DEFAULT = 0;
+	private static final String FULL_TRAFFIC_LEVEL = "max";
+	private static final float FULL_TRAFFIC_LEVEL_DEFAULT = 50;
+
 	private static HashMap parsedArgs = new HashMap();
 	
 	/**
@@ -44,18 +49,30 @@ public class Start {
 	}
 	
 	public static float getZeroTrafficLevel() {
-		return 0;
+		float value = ZERO_TRAFFIC_LEVEL_DEFAULT;
+		List valueAsList = (List)parsedArgs.get(ZERO_TRAFFIC_LEVEL);
+		if (valueAsList != null && valueAsList.size() > 0) {
+			value = Float.parseFloat((String)valueAsList.get(0));
+		}
+		
+		return value;
 	}
 	
-	public static float getMaximumTrafficLevel() {
-		return 50;
+	public static float getFullTrafficLevel() {
+		float value = FULL_TRAFFIC_LEVEL_DEFAULT;
+		List valueAsList = (List)parsedArgs.get(FULL_TRAFFIC_LEVEL);
+		if (valueAsList != null && valueAsList.size() > 0) {
+			value = Float.parseFloat((String)valueAsList.get(0));
+		}
+		
+		return value;
 	}
 
 	public static void main(String argv[]) throws Exception {
 		
 		parseArguments(argv);
 		
-		Audiolizer audiolizer = new SampleAudiolizer(getZeroTrafficLevel(), getMaximumTrafficLevel(), new File(getSamplePath()));
+		Audiolizer audiolizer = new SampleAudiolizer(getZeroTrafficLevel(), getFullTrafficLevel(), new File(getSamplePath()));
 		NetworkPerformanceMonitor monitor = new SigarNetworkPerformanceMonitor();
 		
 		while (true) {
