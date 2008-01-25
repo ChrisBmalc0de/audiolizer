@@ -10,6 +10,7 @@ public class SigarNetworkPerformanceMonitor implements
 	private long previousMeasuredTotalTraffic = 0;
 	private long previousMeasurementTime = 0;
 	private boolean firstRun = true;
+	private Timer timer = new Timer();
 	
 	public SigarNetworkPerformanceMonitor() throws Exception{
 		this(new Sigar());
@@ -30,7 +31,8 @@ public class SigarNetworkPerformanceMonitor implements
 		
 		if (firstRun) {			
 			previousMeasuredTotalTraffic = trafficNow;
-			previousMeasurementTime = System.currentTimeMillis();
+			timer.start();
+			
 			firstRun = false;
 		}
 		
@@ -38,9 +40,9 @@ public class SigarNetworkPerformanceMonitor implements
 		previousMeasuredTotalTraffic = trafficNow;
 		
 		long timeNow = System.currentTimeMillis();
-		long timeDiff = timeNow - previousMeasurementTime + 1; // the +1 is to make sure diff is never 0
-		previousMeasurementTime = timeNow; 
+		long timeDiff = timer.getElapsedTimeAndRestart() + 1; // the +1 is to make sure diff is never 0
 		
+		// Convert from milliseconds to seconds
 		return ((trafficDiff / timeDiff) * 1000);		
 	}
 

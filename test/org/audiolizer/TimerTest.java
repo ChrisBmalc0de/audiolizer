@@ -32,7 +32,6 @@ public class TimerTest {
 		
 		// A crappy test. Actual sleep time varies on my machine between 40 and 60ms,
 		// so I just check that the value is inside some sensible range
-		System.out.println(timer.elapsedSinceStartInMs());
 		assertTrue(timer.elapsedSinceStartInMs() > 25);
 		assertTrue(timer.elapsedSinceStartInMs() < 75);
 	}

@@ -32,23 +32,53 @@ public class SigarNetworkPerformanceMonitorTest {
 		monitor = new SigarNetworkPerformanceMonitor(mockSigar);		
 	}
 	
-	
 	@Test
-	public void testCalculateTotalTrafficSoFar() throws Exception {
+	public void testCalculateAverageTrafficSinceLastMeasurementInBytesPerSec() throws Exception {
+
 		expect(mockSigar.getNetInterfaceList()).andReturn(nifs);
 		
 		expect(mockSigar.getNetInterfaceStat(nifs[0])).andReturn(mockNetInterfaceStat_eth0);
-		expect(mockNetInterfaceStat_eth0.getRxBytes()).andReturn(1024l);
-		expect(mockNetInterfaceStat_eth0.getTxBytes()).andReturn(1024l);
+		expect(mockNetInterfaceStat_eth0.getRxBytes()).andReturn(0l);
+		expect(mockNetInterfaceStat_eth0.getTxBytes()).andReturn(0l);
 
 		expect(mockSigar.getNetInterfaceStat(nifs[1])).andReturn(mockNetInterfaceStat_eth1);
-		expect(mockNetInterfaceStat_eth1.getRxBytes()).andReturn(1024l);
-		expect(mockNetInterfaceStat_eth1.getTxBytes()).andReturn(1024l);
+		expect(mockNetInterfaceStat_eth1.getRxBytes()).andReturn(0l);
+		expect(mockNetInterfaceStat_eth1.getTxBytes()).andReturn(0l);
 
 		control.replay();
 		
-		assertEquals((4*1024l), monitor.calculateTotalTrafficSoFar());
+		assertEquals(0, monitor.calculateAverageTrafficSinceLastMeasurementInBytesPerSec());
 		
 		control.verify();
+		control.reset();
+
+		
 	}
+	
+	@Test
+	public void testCalculateTotalTrafficSoFar() throws Exception {
+
+		assertCalculateTotalTrafficSoFar(0);
+		assertCalculateTotalTrafficSoFar(1024);
+	}
+	
+	private void assertCalculateTotalTrafficSoFar(long nifTrafficInBytes) throws Exception {
+		expect(mockSigar.getNetInterfaceList()).andReturn(nifs);
+		
+		expect(mockSigar.getNetInterfaceStat(nifs[0])).andReturn(mockNetInterfaceStat_eth0);
+		expect(mockNetInterfaceStat_eth0.getRxBytes()).andReturn(nifTrafficInBytes);
+		expect(mockNetInterfaceStat_eth0.getTxBytes()).andReturn(nifTrafficInBytes);
+
+		expect(mockSigar.getNetInterfaceStat(nifs[1])).andReturn(mockNetInterfaceStat_eth1);
+		expect(mockNetInterfaceStat_eth1.getRxBytes()).andReturn(nifTrafficInBytes);
+		expect(mockNetInterfaceStat_eth1.getTxBytes()).andReturn(nifTrafficInBytes);
+
+		control.replay();
+		
+		assertEquals((4*nifTrafficInBytes), monitor.calculateTotalTrafficSoFar());
+		
+		control.verify();
+		control.reset();
+	}
+
 }

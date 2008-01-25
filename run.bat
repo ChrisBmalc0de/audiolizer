@@ -1,1 +1,1 @@
-java -cp bin;lib/sigar.jar org.audiolizer.Start
+java -cp bin;lib/sigar.jar org.audiolizer.Start %1 %2 %3 %4 %5 %6 %7 %8 %9
