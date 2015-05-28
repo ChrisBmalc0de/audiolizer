@@ -1,0 +1,1 @@
+There are tons of utilities to visualize the network traffic. Unfortunately this does not help if you are not able to view the screen. Some times it would be nice to hear how much traffic is going on: this small utility is for that. The name "audiolizer" is made up word resembling "visualizer".
